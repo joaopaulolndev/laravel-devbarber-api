@@ -2,24 +2,77 @@
 
 namespace App\Models;
 
-use Tymon\JWTAuth\Contracts\JWTSubject;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable implements JWTSubject{
-    use Notifiable;
-    protected $hidden = ['password'];
+class User extends Authenticatable
+{
+    use HasApiTokens, Notifiable;
 
-    public $timestamps = false;
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name', 'email', 'password', 'avatar'
+    ];
 
-    public function getJWTIdentifier(){
-        return $this->getKey();
+    /**
+     * @var array
+     */
+    protected $appends = ['avatar_url'];
+
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
+
+    /**
+     * @param $value
+     */
+    public function setPasswordAttribute($value)
+    {
+        if (!is_null($value)) {
+            $this->attributes['password'] = app("hash")->make($value);
+        }
     }
 
-    public function getJWTCustomClaims(){
-                    
-        return [];
+    /**
+     * @return string|null
+     */
+    public function getAvatarUrlAttribute()
+    {
+        if ($this->avatar) {
+            return url('uploads/avatars') . '/' . $this->avatar;
+        }
+
+        return url('uploads/avatars') . '/default.png';
     }
 
+    /**
+     * User has many .
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function oauthAccessToken()
+    {
+        return $this->hasMany('\App\Models\OauthAccessToken');
+    }
+
+    public function appointments()
+    {
+        return $this->hasMany(UserAppointment::class);
+    }
+
+    public function favorites()
+    {
+        return $this->hasMany(UserFavorite::class);
+    }
 }

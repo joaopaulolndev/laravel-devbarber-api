@@ -3,32 +3,31 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\BarbersController;
-use App\Http\Controllers\testeController;
-Route::get('/ping',function(){
-return ['pong'=>true];
+Route::middleware('auth:api')->get('/user', function (Request $request) {
+    return $request->user();
 });
 
-Route::get('/401',[AuthController::class,'unauthorized'])->name('login');
+Route::group(['prefix' => 'v1', 'namespace' => 'Api\v1'], function () {
+    Route::post('auth/login', 'Auth\AuthController@login');
+    Route::post('auth/register', 'Auth\AuthController@register');
+});
 
-//Route::post('/ramdom',[BarbersController::class, 'createRandom']);
-Route::post('/auth/login',[AuthController::class, 'login']);
-Route::post('/auth/logout',[AuthController::class, 'logout']);
-Route::post('/auth/refresh',[AuthController::class, 'refresh']);
-Route::post('/user',[AuthController::class, 'create']);
+/*
+ * Routes private
+ */
+Route::group(['prefix' => 'v1', 'namespace' => 'Api\v1', 'middleware' => ['auth:api']], function () {
+    Route::get('auth/me', 'Auth\AuthController@me');
+    Route::post('auth/updateProfile', 'Auth\AuthController@updateProfile');
+    Route::get('auth/logout', 'Auth\AuthController@logout');
 
-Route::get('/user',[UserController::class,'read']);
-Route::put('/user',[UserController::class],'update');
-Route::get('/user/favorites',[UserController::class],'getFavorites');
-Route::post('/user/favorite',[UserController::class],'addFavorite');
-Route::get('/user/appointments',[UserController::class], 'getAppointments');
+    Route::get('/users/favorites', 'UserController@getFavorites');
+    Route::post('/users/favorite', 'UserController@addFavorites');
+    Route::get('/users/appointments', 'UserController@getAppointment');
 
+    Route::get('/barbers', 'BarberController@index');
+    Route::get('/barbers/{id}', 'BarberController@show');
+    Route::post('/barbers/{id}/appointment', 'BarberController@addAppoitment');
 
-Route::get('/barbers',[BarbersController::class, 'list']);
-Route::get('/barber/{id}',[BarbersController::class,'one']);
-Route::post('/barber/{id}/appointment',[BarbersController::class,'setAppointment']);
+    Route::get('/search', 'BarberController@search');
+});
 
-Route::get('/search',[BarbersController::class,'search']);
-Route::get('/teste',  [testeController::class,'teste']);

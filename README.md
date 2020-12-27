@@ -1,25 +1,60 @@
-# Laravel DevBarber API
+<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
 
-<p align="center">
-  
-  <img alt="Code size" src="https://img.shields.io/github/languages/code-size/joaopaulolndev/laravel-devbarber-api">
+# Getting started
 
-  <a href="https://github.com/joaopaulolndev/laravel-devbarber-api/commits/master">
-    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/joaopaulolndev/laravel-devbarber-api">
-  </a>
+# laravel-barber-api-mysql
+Demo Project Laravel Barber
 
-  <a href="https://www.linkedin.com/in/joaopaulolndev/">
-    <img alt="Linkedin" src="https://img.shields.io/badge/Linkedin-joaopaulolndev-blue">
-  </a>
-</p>
+## Installation
 
-## 💻 Projetct
+Please check the official laravel installation guide for server requirements before you start. [Official Documentation](https://laravel.com/docs/6.0/installation#installation)
 
-Laravel devbarber API is a project made with Laravel 8. It is a social networking API for programmers.
-It was done during the course of [B7web](https://alunos.b7web.com.br/).
 
-## 🚀 Technologies
+Clone the repository
 
--   [PHP](https://www.php.net/)
--   [Laravel](https://laravel.com/)
--   [Mysql](https://mysql.com/)
+    git clone git@gitlab.com:rodineiti/laravel-barber-api-mysql.git
+
+Switch to the repo folder
+
+    cd laravel-barber-api-mysql
+
+Install all the dependencies using composer
+
+    composer install
+
+Copy the example env file and make the required configuration changes in the .env file
+
+    cp .env.example .env
+    
+Set Database MYSQL in .env
+
+    DB_CONNECTION=mysql
+    DB_HOST=
+    DB_PORT=
+    DB_DATABASE=
+    DB_USERNAME=
+    DB_PASSWORD=
+
+Generate a new application key
+
+    php artisan key:generate
+    
+DUMP database file barbers.sql
+
+Run the database migrations (**Set the database connection in .env before migrating**)
+
+    php artisan migrate
+
+PASSPORT - Create the encryption keys needed to generate secure access tokens
+
+    php artisan passport:install
+
+Start the local development server
+
+    php artisan serve
+
+You can now access the server at http://localhost:8000
+
+To know the routes of the system, run the command:
+    
+    php artisan route:list
