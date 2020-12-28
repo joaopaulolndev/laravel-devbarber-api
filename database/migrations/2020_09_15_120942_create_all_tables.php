@@ -31,6 +31,7 @@ class CreateAllTables extends Migration
             $table->integer('id_barber');
             $table->datetime('ap_datetime');
         });
+
         Schema::create('barbers', function (Blueprint $table) {
             $table->id();
             $table->string('name');
