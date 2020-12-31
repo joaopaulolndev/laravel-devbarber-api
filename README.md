@@ -13,7 +13,7 @@
   </a>
 </p>
 
-## 💻 Projetct
+## 💻 Project
 
 Laravel devbarber API is a project made with Laravel 8. It is a social networking API for programmers.
 It was done during the course of [B7web](https://alunos.b7web.com.br/).
